@@ -5,9 +5,12 @@ const submitBtn = document.getElementById('submit-btn');
 const historyList = document.getElementById('history-list');
 const emptyMsg = document.getElementById('empty-msg');
 
+// Use localhost:3000 if opened directly via file:// protocol
+const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
+
 async function loadHistory() {
   try {
-    const res = await fetch('/api/downloads');
+    const res = await fetch(`${API_BASE}/api/downloads`);
     const downloads = await res.json();
     renderHistory(downloads);
   } catch (e) {
@@ -85,7 +88,7 @@ form.addEventListener('submit', async (e) => {
   submitBtn.querySelector('.btn-text').textContent = 'saving...';
 
   try {
-    const res = await fetch('/api/download', {
+    const res = await fetch(`${API_BASE}/api/download`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ url, filename })
