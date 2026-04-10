@@ -34,8 +34,6 @@ async function loadHistory() {
 function renderHistory(downloads) {
   const items = Array.isArray(downloads) ? downloads : [];
 
-  historyCount.textContent = `${items.length} ${items.length === 1 ? 'item' : 'items'}`;
-
   if (items.length === 0) {
     historyList.innerHTML = '';
     emptyMsg.style.display = 'block';
