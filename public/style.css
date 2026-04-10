@@ -1,13 +1,17 @@
 :root {
-  --bg: #0d0d0d;
-  --surface: #1a1a1a;
-  --border: #333;
-  --text: #e0e0e0;
-  --text-dim: #888;
-  --accent: #00ff88;
-  --accent-dim: #00cc6a;
-  --error: #ff4444;
-  --font-mono: 'SF Mono', 'Fira Code', 'JetBrains Mono', 'Consolas', monospace;
+  --bg: #050505;
+  --surface: rgba(255, 255, 255, 0.03);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-focus: rgba(255, 255, 255, 0.4);
+  --text: #ededed;
+  --text-dim: #737373;
+  --accent: #E6F0A3; /* Pale neon yellow/green */
+  --accent-dim: rgba(230, 240, 163, 0.1);
+  --error: #ff5555;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  --shadow-glow: 0 0 12px rgba(230, 240, 163, 0.2);
+  --radius: 0px; /* Brutalist/Minimal no-radius */
+  --transition: 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -17,7 +21,10 @@
 }
 
 body {
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(at 50% 0%, rgba(230, 240, 163, 0.03) 0px, transparent 50%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
   color: var(--text);
   font-family: var(--font-mono);
   font-size: 14px;
@@ -25,165 +32,173 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 8vh 24px;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
 }
 
 .container {
   width: 100%;
-  max-width: 480px;
+  max-width: 520px;
+  position: relative;
 }
 
 header {
-  margin-bottom: 40px;
-  text-align: center;
+  margin-bottom: 60px;
 }
 
 h1 {
-  font-size: 28px;
-  font-weight: 400;
-  letter-spacing: 2px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .cursor {
+  display: inline-block;
+  width: 12px;
+  height: 20px;
+  background-color: var(--accent);
+  margin-left: 2px;
   animation: blink 1s step-end infinite;
-  color: var(--accent);
+  box-shadow: var(--shadow-glow);
 }
 
 @keyframes blink {
+  0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
 
 .subtitle {
   color: var(--text-dim);
-  font-size: 12px;
-  margin-top: 4px;
+  font-size: 13px;
+  margin-top: 8px;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
+  position: relative;
 }
 
 .input-group {
   position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.input-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  transition: color var(--transition);
 }
 
 .input-group input {
   width: 100%;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 14px 12px 8px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0;
   color: var(--text);
   font-family: var(--font-mono);
   font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  font-weight: 400;
+  transition: border-color var(--transition);
 }
 
 .input-group input::placeholder {
-  color: var(--text-dim);
-  opacity: 0;
+  color: rgba(255, 255, 255, 0.15);
 }
 
 .input-group input:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.1);
+  border-bottom-color: var(--text);
 }
 
-.input-group input:focus::placeholder {
-  opacity: 1;
-}
-
-.input-label {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 11px;
-  color: var(--text-dim);
-  pointer-events: none;
-  transition: all 0.2s;
-}
-
-.input-group input:focus + .input-label,
-.input-group input:not(:placeholder-shown) + .input-label {
-  top: 6px;
-  font-size: 9px;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.input-group input:focus + .input-label {
+  color: var(--text);
 }
 
 button {
-  background: var(--surface);
-  border: 1px solid var(--accent);
-  color: var(--accent);
+  background: var(--text);
+  color: var(--bg);
+  border: none;
   font-family: var(--font-mono);
+  font-weight: 700;
   font-size: 13px;
-  padding: 12px 20px;
-  border-radius: 4px;
+  padding: 14px 24px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: transform var(--transition), background-color var(--transition), color var(--transition);
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-top: 8px;
+  margin-top: 16px;
+  position: relative;
+  overflow: hidden;
 }
 
 button:hover {
   background: var(--accent);
-  color: var(--bg);
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
 }
 
 button:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 
 button:disabled {
-  opacity: 0.6;
+  background: var(--surface);
+  color: var(--text-dim);
   cursor: not-allowed;
-}
-
-button.loading {
-  pointer-events: none;
+  transform: none;
+  box-shadow: none;
 }
 
 .history-section {
-  margin-top: 48px;
+  margin-top: 80px;
 }
 
 .history-section h2 {
-  font-size: 11px;
-  font-weight: 400;
+  font-size: 10px;
+  font-weight: 700;
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 2px;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.history-section h2::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+  margin-left: 16px;
 }
 
 .history-list {
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
 }
 
 .history-item {
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  animation: fadeIn 0.3s ease-out;
-  animation-fill-mode: both;
+  background: var(--bg);
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.history-item:last-child {
-  border-bottom: none;
-}
-
-@keyframes fadeIn {
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -192,56 +207,92 @@ button.loading {
 }
 
 .history-item a {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 
+    "filename date"
+    "url url";
+  gap: 4px 16px;
+  padding: 16px;
   color: var(--text);
   text-decoration: none;
-  display: block;
-  transition: color 0.2s;
+  transition: background-color var(--transition);
 }
 
 .history-item a:hover {
-  color: var(--accent);
-}
-
-.history-item .url {
-  font-size: 12px;
-  word-break: break-all;
-  color: var(--text-dim);
-  margin-bottom: 4px;
+  background-color: var(--surface);
 }
 
 .history-item .filename {
+  grid-area: filename;
   font-size: 13px;
+  font-weight: 400;
+  color: var(--accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-item .url {
+  grid-area: url;
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .history-item .date {
-  font-size: 10px;
-  color: #555;
-  margin-top: 4px;
+  grid-area: date;
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: right;
+  white-space: nowrap;
 }
 
 .empty-msg {
   color: var(--text-dim);
   font-size: 12px;
-  text-align: center;
-  padding: 20px;
+  padding: 32px 0;
+  text-align: left;
+  font-style: italic;
+}
+
+/* Toast Messages */
+.temp-msg {
+  position: absolute;
+  bottom: -48px;
+  left: 0;
+  font-size: 11px;
+  padding: 8px 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .error-msg {
   color: var(--error);
-  font-size: 12px;
-  padding: 12px;
-  background: rgba(255, 68, 68, 0.1);
-  border-radius: 4px;
-  margin-top: 8px;
-  animation: fadeIn 0.2s;
+  border-left: 2px solid var(--error);
+  background: rgba(255, 85, 85, 0.05);
 }
 
 .success-msg {
   color: var(--accent);
-  font-size: 12px;
-  padding: 12px;
-  background: rgba(0, 255, 136, 0.1);
-  border-radius: 4px;
-  margin-top: 8px;
-  animation: fadeIn 0.2s;
+  border-left: 2px solid var(--accent);
+  background: var(--accent-dim);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+::-moz-selection {
+  background: var(--accent);
+  color: var(--bg);
 }
