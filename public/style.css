@@ -334,6 +334,8 @@ button[type="submit"]:hover:not(:disabled) .send-icon {
   border-bottom: 1px solid var(--bg-secondary);
   transition: background 0.2s;
   animation: slideIn 0.3s ease both;
+  display: flex;
+  align-items: stretch;
 }
 
 .history-item:last-child {
@@ -345,6 +347,7 @@ button[type="submit"]:hover:not(:disabled) .send-icon {
 }
 
 .history-item a {
+  flex: 1;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
@@ -352,6 +355,22 @@ button[type="submit"]:hover:not(:disabled) .send-icon {
   text-decoration: none;
   color: inherit;
   gap: 16px;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 0 16px 0 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn:hover {
+  color: #f87171; /* red-400 */
 }
 
 .history-item .filename {

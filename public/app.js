@@ -69,16 +69,20 @@ function renderHistory() {
 
   historyList.innerHTML = pageItems
     .map(
-      (item, index) => `
+      (item, index) => {
+        const actualIndex = startIndex + index;
+        return `
       <li class="history-item" style="animation-delay: ${index * 0.05}s">
         <a href="javascript:void(0)" data-filename="${escapeHtml(item.filename)}" data-url="${escapeHtml(item.url)}" title="Click to view PDF">
           <div class="filename">${escapeHtml(item.filename)}</div>
           <div class="url">${escapeHtml(item.url)}</div>
           <div class="date">${formatDate(item.date)}</div>
         </a>
+        <button class="delete-btn" data-index="${actualIndex}" title="Remove from history">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+        </button>
       </li>
-    `,
-    )
+    `})
     .join("");
 
   if (totalPages > 1) {
@@ -152,6 +156,19 @@ function showTempMessage(message, type) {
 }
 
 historyList.addEventListener("click", async (event) => {
+  const deleteBtn = event.target.closest(".delete-btn");
+  if (deleteBtn) {
+    event.stopPropagation();
+    const index = parseInt(deleteBtn.dataset.index, 10);
+    if (!isNaN(index)) {
+      allDownloads.splice(index, 1);
+      saveHistoryToLocal();
+      renderHistory();
+      showTempMessage("item removed", "success");
+    }
+    return;
+  }
+
   const target = event.target.closest("a[data-filename]");
   if (!target) return;
   const filename = target.dataset.filename;
@@ -173,8 +190,8 @@ form.addEventListener("submit", async (event) => {
 
   if (!url) return;
 
-  if (antiPaywallEnabled) {
-    url = url.replace(/medium\.com/g, "freedium-mirror.cfd");
+  if (antiPaywallEnabled && url.includes("medium.com")) {
+    url = "https://freedium-mirror.cfd/" + url;
   }
 
   submitBtn.disabled = true;
