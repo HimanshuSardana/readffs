@@ -42,10 +42,14 @@
             </div>
 
             <div class="form-actions">
-              <div style="display: flex; gap: 16px; align-items: center;">
-                <select id="theme-select" class="theme-dropdown" title="Select PDF Theme">
-                  <option value="light">light pdf</option>
-                  <option value="dark" selected>dark pdf</option>
+              <div style="display: flex; gap: 16px; align-items: center">
+                <select
+                  id="theme-select"
+                  class="theme-dropdown"
+                  title="Select PDF Theme"
+                >
+                  <option value="light" selected>light pdf</option>
+                  <option value="dark">dark pdf</option>
                 </select>
 
                 <!-- Toggle logic relies on #anti-paywall-toggle classList.toggle('active') -->
@@ -55,23 +59,23 @@
                   class="custom-toggle"
                   title="Prepend freedium-mirror.cfd/ to medium.com"
                 >
-                <span class="checkbox">
-                  <svg
-                    class="check-icon"
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="3"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </span>
-                <span class="toggle-text">anti-paywall</span>
-              </button>
+                  <span class="checkbox">
+                    <svg
+                      class="check-icon"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
+                  <span class="toggle-text">anti-paywall</span>
+                </button>
               </div>
 
               <button type="submit" id="submit-btn">
@@ -116,7 +120,7 @@
                 </svg>
                 <span>library.</span>
               </div>
-              <span id="history-count">0 rows</span>
+              <span id="history-count">0 articles</span>
             </div>
 
             <div class="history-list-wrapper">
@@ -143,4 +147,3 @@
     <script src="app.js"></script>
   </body>
 </html>
-

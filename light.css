@@ -5,7 +5,7 @@
 @import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+SC:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap");
 
 :root {
-  --bg-base: #f7f3ec; /* warm aged paper */
+  --bg-base: #fff; /* warm aged paper */
   --bg-surface: #ede8df; /* slightly deeper for code blocks */
   --bg-elevated: #e8e2d8;
 

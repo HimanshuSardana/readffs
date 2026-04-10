@@ -49,7 +49,7 @@ function saveHistoryToLocal() {
 }
 
 function renderHistory() {
-  historyCount.textContent = `${allDownloads.length} ${allDownloads.length === 1 ? "row" : "rows"}`;
+  historyCount.textContent = `${allDownloads.length} ${allDownloads.length === 1 ? "article" : "articles"}`;
 
   if (allDownloads.length === 0) {
     historyList.innerHTML = "";
@@ -69,10 +69,9 @@ function renderHistory() {
   const pageItems = allDownloads.slice(startIndex, endIndex);
 
   historyList.innerHTML = pageItems
-    .map(
-      (item, index) => {
-        const actualIndex = startIndex + index;
-        return `
+    .map((item, index) => {
+      const actualIndex = startIndex + index;
+      return `
       <li class="history-item" style="animation-delay: ${index * 0.05}s">
         <a href="javascript:void(0)" data-filename="${escapeHtml(item.filename)}" data-url="${escapeHtml(item.url)}" title="Click to view PDF">
           <div class="filename">${escapeHtml(item.filename)}</div>
@@ -83,7 +82,8 @@ function renderHistory() {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
         </button>
       </li>
-    `})
+    `;
+    })
     .join("");
 
   if (totalPages > 1) {
@@ -174,7 +174,9 @@ historyList.addEventListener("click", async (event) => {
   if (!target) return;
   const filename = target.dataset.filename;
   try {
-    const res = await fetch(`${API_BASE}/api/pdf/${encodeURIComponent(filename)}`);
+    const res = await fetch(
+      `${API_BASE}/api/pdf/${encodeURIComponent(filename)}`,
+    );
     if (!res.ok) throw new Error("Failed to fetch PDF");
     const blob = await res.blob();
     const blobUrl = URL.createObjectURL(blob);
@@ -214,11 +216,11 @@ form.addEventListener("submit", async (event) => {
 
     urlInput.value = "";
     showTempMessage(`saved ${data.filename}`, "success");
-    
+
     allDownloads.unshift({
       url: url,
       filename: data.filename,
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
     });
     saveHistoryToLocal();
     renderHistory();
@@ -231,4 +233,3 @@ form.addEventListener("submit", async (event) => {
 });
 
 loadHistory();
-

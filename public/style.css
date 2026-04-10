@@ -56,6 +56,10 @@ body {
   padding: 64px 24px;
 }
 
+#theme-select {
+  padding: 8px 16px;
+}
+
 .layout-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -243,7 +247,8 @@ input[type="url"]::placeholder {
   text-transform: lowercase;
 }
 
-.theme-dropdown:hover, .theme-dropdown:focus {
+.theme-dropdown:hover,
+.theme-dropdown:focus {
   border-color: var(--border-hover);
   color: var(--text-muted);
 }
@@ -512,4 +517,3 @@ button[type="submit"]:hover:not(:disabled) .send-icon {
     transform: translateX(0);
   }
 }
-
