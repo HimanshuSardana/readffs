@@ -43,7 +43,7 @@ async function loadHistory() {
 }
 
 function renderHistory() {
-  historyCount.textContent = `${allDownloads.length} ${allDownloads.length === 1 ? "item" : "items"}`;
+  historyCount.textContent = `${allDownloads.length} ${allDownloads.length === 1 ? "row" : "rows"}`;
 
   if (allDownloads.length === 0) {
     historyList.innerHTML = "";
