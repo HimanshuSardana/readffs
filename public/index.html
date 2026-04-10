@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>readffs.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>readffs<span class="cursor">_</span></h1>
+      <p class="subtitle">save pages for later</p>
+    </header>
+
+    <form id="download-form">
+      <div class="input-group">
+        <input 
+          type="url" 
+          id="url-input" 
+          placeholder="https://example.com/article" 
+          required
+          autocomplete="off"
+        >
+        <label for="url-input" class="input-label">url</label>
+      </div>
+
+      <div class="input-group">
+        <input 
+          type="text" 
+          id="filename-input" 
+          placeholder="optional filename"
+          autocomplete="off"
+        >
+        <label for="filename-input" class="input-label">filename</label>
+      </div>
+
+      <button type="submit" id="submit-btn">
+        <span class="btn-text">save</span>
+        <span class="btn-loader"></span>
+      </button>
+    </form>
+
+    <section class="history-section">
+      <h2>saved</h2>
+      <ul id="history-list" class="history-list"></ul>
+      <p id="empty-msg" class="empty-msg">nothing saved yet</p>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
