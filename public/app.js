@@ -1,13 +1,21 @@
 const form = document.getElementById('download-form');
 const urlInput = document.getElementById('url-input');
-const filenameInput = document.getElementById('filename-input');
 const submitBtn = document.getElementById('submit-btn');
 const historyList = document.getElementById('history-list');
 const emptyMsg = document.getElementById('empty-msg');
 const antiPaywallToggle = document.getElementById('anti-paywall-toggle');
+const historyCount = document.getElementById('history-count');
+const pagination = document.getElementById('pagination');
+const prevPageBtn = document.getElementById('prev-page');
+const nextPageBtn = document.getElementById('next-page');
+const pageInfo = document.getElementById('page-info');
 
 const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
 let antiPaywallEnabled = false;
+
+let allDownloads = [];
+let currentPage = 1;
+const itemsPerPage = 8;
 
 antiPaywallToggle.addEventListener('click', () => {
   antiPaywallEnabled = !antiPaywallEnabled;
@@ -24,27 +32,39 @@ document.addEventListener('keydown', (e) => {
 async function loadHistory() {
   try {
     const res = await fetch(`${API_BASE}/api/downloads`);
-    const downloads = await res.json();
-    renderHistory(downloads);
+    const data = await res.json();
+    allDownloads = Array.isArray(data) ? data : [];
+    currentPage = 1; // Reset to first page on load
+    renderHistory();
   } catch (error) {
     showTempMessage('history unavailable', 'error');
   }
 }
 
-function renderHistory(downloads) {
-  const items = Array.isArray(downloads) ? downloads : [];
+function renderHistory() {
+  historyCount.textContent = `${allDownloads.length} ${allDownloads.length === 1 ? 'item' : 'items'}`;
 
-  if (items.length === 0) {
+  if (allDownloads.length === 0) {
     historyList.innerHTML = '';
     emptyMsg.style.display = 'block';
+    pagination.style.display = 'none';
     return;
   }
 
   emptyMsg.style.display = 'none';
-  historyList.innerHTML = items
+
+  const totalPages = Math.ceil(allDownloads.length / itemsPerPage);
+  if (currentPage > totalPages) currentPage = totalPages;
+  if (currentPage < 1) currentPage = 1;
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const pageItems = allDownloads.slice(startIndex, endIndex);
+
+  historyList.innerHTML = pageItems
     .map(
       (item, index) => `
-      <li class="history-item" style="animation-delay: ${index * 0.04}s">
+      <li class="history-item" style="animation-delay: ${index * 0.05}s">
         <a href="javascript:void(0)" data-url="${escapeHtml(item.url)}" title="Click to copy URL">
           <div class="filename">${escapeHtml(item.filename)}</div>
           <div class="url">${escapeHtml(item.url)}</div>
@@ -54,7 +74,31 @@ function renderHistory(downloads) {
     `
     )
     .join('');
+
+  if (totalPages > 1) {
+    pagination.style.display = 'flex';
+    pageInfo.textContent = `${currentPage} / ${totalPages}`;
+    prevPageBtn.disabled = currentPage === 1;
+    nextPageBtn.disabled = currentPage === totalPages;
+  } else {
+    pagination.style.display = 'none';
+  }
 }
+
+prevPageBtn.addEventListener('click', () => {
+  if (currentPage > 1) {
+    currentPage--;
+    renderHistory();
+  }
+});
+
+nextPageBtn.addEventListener('click', () => {
+  const totalPages = Math.ceil(allDownloads.length / itemsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderHistory();
+  }
+});
 
 function escapeHtml(text) {
   return String(text)
@@ -91,26 +135,19 @@ async function copyToClipboard(text) {
 
 function showTempMessage(message, type) {
   const existing = document.querySelector('.temp-msg');
-
-  if (existing) {
-    existing.remove();
-  }
+  if (existing) existing.remove();
 
   const el = document.createElement('div');
   el.className = `temp-msg ${type === 'error' ? 'error-msg' : 'success-msg'}`;
   el.textContent = message;
-  form.appendChild(el);
+  document.body.appendChild(el);
 
-  setTimeout(() => {
-    el.remove();
-  }, 2200);
+  setTimeout(() => el.remove(), 2500);
 }
 
 historyList.addEventListener('click', (event) => {
   const target = event.target.closest('a[data-url]');
-  if (!target) {
-    return;
-  }
+  if (!target) return;
   copyToClipboard(target.dataset.url);
 });
 
@@ -118,24 +155,21 @@ form.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   let url = urlInput.value.trim();
-  const filename = filenameInput.value.trim();
 
-  if (!url) {
-    return;
-  }
+  if (!url) return;
 
   if (antiPaywallEnabled) {
     url = url.replace(/medium\.com/g, 'freedium-mirror.cfd');
   }
 
   submitBtn.disabled = true;
-  submitBtn.querySelector('.btn-text').textContent = 'saving';
+  submitBtn.querySelector('.btn-text').textContent = 'Saving...';
 
   try {
     const res = await fetch(`${API_BASE}/api/download`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, filename }),
+      body: JSON.stringify({ url }), // Filename removed
     });
     const data = await res.json();
 
@@ -145,14 +179,13 @@ form.addEventListener('submit', async (event) => {
     }
 
     urlInput.value = '';
-    filenameInput.value = '';
     showTempMessage(`saved ${data.filename}`, 'success');
     await loadHistory();
   } catch (error) {
     showTempMessage('network error', 'error');
   } finally {
     submitBtn.disabled = false;
-    submitBtn.querySelector('.btn-text').textContent = 'save';
+    submitBtn.querySelector('.btn-text').textContent = 'Save';
   }
 });
 
