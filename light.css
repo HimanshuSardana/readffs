@@ -1,0 +1,518 @@
+/* ============================================================
+   TUFTE LIGHT THEME
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+SC:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap");
+
+:root {
+  --bg-base: #f7f3ec; /* warm aged paper */
+  --bg-surface: #ede8df; /* slightly deeper for code blocks */
+  --bg-elevated: #e8e2d8;
+
+  --border-faint: #d0c4b0;
+  --border-muted: #c0a878;
+
+  --text-primary: #2c2416; /* deep warm brown-black */
+  --text-heading: #1a1208;
+  --text-secondary: #6a5030;
+  --text-muted: #9a8060;
+  --text-faint: #b8a080;
+  --text-sidenote: #b89050;
+
+  --accent: #8a5a18; /* dark amber — readable on paper */
+
+  --main-font: "EB Garamond", "Cormorant Garamond", Georgia, serif;
+  --heading-font: "Cormorant SC", "Cormorant Garamond", Georgia, serif;
+  --code-font: "Courier New", "Courier", monospace;
+}
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+@page {
+  size: A5 portrait;
+  /* Tufte uses wider outer margins for sidenotes */
+  margin: 1.5cm 1cm 2cm 1.5cm;
+}
+
+html,
+body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--main-font);
+  font-size: 13pt;
+  line-height: 1.65;
+  hyphens: auto;
+  -webkit-print-color-adjust: exact;
+}
+
+/* ============================================================
+   TUFTE LAYOUT — body text + sidenote column
+   A true Tufte layout uses ~55% for body, ~40% for notes
+   ============================================================ */
+
+article {
+  display: grid;
+  grid-template-columns: 100% 1fr;
+  column-gap: 2rem;
+  max-width: 100%;
+}
+
+article:not(:last-of-type) {
+  page-break-after: always;
+}
+
+/* All direct article children go in column 1 by default */
+article > * {
+  grid-column: 1;
+}
+
+/* Sidenotes span into column 2, anchored by float in print */
+.sidenote,
+.marginnote {
+  grid-column: 2;
+  font-size: 0.78em;
+  line-height: 1.5;
+  color: var(--text-muted);
+  border-left: 1px solid var(--border-faint);
+  padding-left: 1rem;
+  /* In print, sidenotes float to the margin */
+  float: right;
+  clear: right;
+  width: 100%;
+  margin-right: -45%;
+  margin-bottom: 1rem;
+}
+
+.sidenote-ref,
+.marginnote-ref {
+  font-size: 0.65em;
+  vertical-align: super;
+  color: var(--text-sidenote);
+  font-style: normal;
+  line-height: 0;
+  cursor: default;
+}
+
+.sidenote-number {
+  display: block;
+  color: var(--text-sidenote);
+  font-size: 0.82em;
+  margin-bottom: 0.2em;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--heading-font);
+  font-weight: 400;
+  color: var(--text-heading);
+  page-break-after: avoid;
+  page-break-inside: avoid;
+}
+
+/* Prevents dangling headings */
+h1::after,
+h2::after,
+h3::after,
+h4::after,
+h5::after,
+h6::after {
+  content: "";
+  display: block;
+  height: 5rem;
+  margin-bottom: -5rem;
+}
+
+/* H1 — article title, large and open */
+h1 {
+  font-size: 2.4em;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  margin: 0 0 0.15em;
+}
+
+/* H2 — section marker, small caps feel */
+h2 {
+  font-size: 0.88em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 2.2em 0 0.6em;
+}
+
+/* H3 — subsection, italic */
+h3 {
+  font-style: italic;
+  font-size: 1.1em;
+  color: var(--text-secondary);
+  margin: 1.6em 0 0.4em;
+}
+
+h4,
+h5,
+h6 {
+  font-style: italic;
+  font-size: 1em;
+  color: var(--text-muted);
+  margin: 1.2em 0 0.3em;
+}
+
+/* Hide heading anchors in print */
+h1 a.anchor,
+h2 a.anchor,
+h3 a.anchor,
+h4 a.anchor,
+h5 a.anchor,
+h6 a.anchor {
+  visibility: hidden;
+  position: absolute;
+}
+
+/* ============================================================
+   ARTICLE HEADER
+   ============================================================ */
+
+.article__header {
+  margin: 0 0 2em;
+  grid-column: 1 / -1;
+}
+
+.article__title {
+  font-family: var(--heading-font);
+  font-size: 2.4em;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  color: var(--text-heading);
+  margin: 0 0 0.2em;
+}
+
+.article__subtitle {
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 1em;
+  margin-bottom: 2em;
+}
+
+.article__url {
+  font-style: italic;
+  font-size: 0.82em;
+  color: var(--text-faint);
+}
+
+/* ============================================================
+   EPIGRAPH — Tufte uses these at chapter/section openings
+   ============================================================ */
+
+.epigraph {
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 0.96em;
+  padding-bottom: 1.8em;
+  border-bottom: 0.5px solid var(--border-faint);
+  margin-bottom: 2em;
+  line-height: 1.7;
+}
+
+.epigraph cite {
+  display: block;
+  font-style: normal;
+  font-size: 0.82em;
+  color: var(--text-faint);
+  margin-top: 0.5em;
+}
+
+/* ============================================================
+   ARTICLE CONTENT
+   ============================================================ */
+
+.article__content p {
+  margin: 0;
+  orphans: 3;
+  widows: 3;
+}
+
+/* Tufte uses indent instead of paragraph spacing */
+.article__content p + p {
+  text-indent: 1.8em;
+}
+
+.article__content p + p > img:only-child {
+  margin-left: -1.8em;
+}
+
+/* Horizontal rule — thin, recessive */
+.article__content hr {
+  border: none;
+  border-top: 0.5px solid var(--border-faint);
+  margin: 1.8em 0;
+}
+
+/* Blockquote — Tufte style: left rule, indented */
+.article__content blockquote {
+  border-left: 2px solid var(--border-muted);
+  padding-left: 1.5em;
+  margin: 1.4em 0;
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: 0.96em;
+  line-height: 1.65;
+}
+
+/* Links — warm amber, understated */
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 0.5px solid #5a4a2a;
+}
+
+/* ============================================================
+   CODE
+   ============================================================ */
+
+.article__content pre,
+.article__content code {
+  font-family: var(--code-font);
+  font-size: 0.82em;
+  color: #a09878;
+}
+
+.article__content pre {
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-faint);
+  padding: 0.85em 1.1em;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: 1.5;
+  margin: 1.4em 0;
+}
+
+.article__content code {
+  background: var(--bg-surface);
+  padding: 0.1em 0.35em;
+  border-radius: 2px;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  font-size: 1em;
+}
+
+.article__content kbd,
+.article__content samp {
+  font-family: var(--code-font);
+  font-size: 0.82em;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-faint);
+  padding: 0.1em 0.4em;
+  border-radius: 2px;
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   TABLES — Tufte-style: no vertical rules, minimal lines
+   ============================================================ */
+
+.article__content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin: 1.6em 0;
+}
+
+.article__content th {
+  font-family: var(--heading-font);
+  font-weight: 400;
+  font-size: 0.88em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-align: left;
+  vertical-align: bottom;
+  padding: 0.3em 1em 0.4em 0;
+  border-bottom: 1px solid var(--border-muted);
+}
+
+.article__content td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.35em 1em 0.35em 0;
+  color: var(--text-primary);
+}
+
+.article__content tr {
+  border-bottom: 0.5px solid var(--border-faint);
+}
+
+.article__content tr:last-child {
+  border-bottom: 1px solid var(--border-muted);
+}
+
+/* ============================================================
+   FIGURES
+   ============================================================ */
+
+.article__content img {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
+.article__content figure {
+  display: block;
+  margin: 1.8em 0;
+  text-align: left;
+  page-break-inside: avoid;
+}
+
+.article__content figcaption {
+  font-size: 0.8em;
+  color: var(--text-faint);
+  font-style: italic;
+  margin-top: 0.5em;
+  line-height: 1.4;
+}
+
+/* Full-width figures that span both columns */
+.article__content figure.fullwidth {
+  grid-column: 1 / -1;
+}
+
+/* ============================================================
+   LISTS
+   ============================================================ */
+
+.article__content ol,
+.article__content ul {
+  padding-left: 1.8em;
+  list-style-position: outside;
+  margin: 0.6em 0;
+  font-size: 0.96em;
+}
+
+.article__content li {
+  margin-bottom: 0.2em;
+}
+
+/* ============================================================
+   COVER PAGE
+   ============================================================ */
+
+.cover {
+  color: var(--text-primary);
+  border: 0.5px solid var(--border-muted);
+  font-family: var(--heading-font);
+  padding: 2.5em;
+}
+
+.cover__title {
+  font-size: 2.4em;
+  line-height: 1.1;
+  color: var(--text-heading);
+  letter-spacing: 0.01em;
+}
+
+.cover__subtitle {
+  font-style: italic;
+  color: var(--text-muted);
+  margin: 0.8em 0;
+}
+
+.cover__author {
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin: 1.2em 0;
+}
+
+.cover__date {
+  font-size: 0.85em;
+  color: var(--text-faint);
+}
+
+/* ============================================================
+   TABLE OF CONTENTS
+   ============================================================ */
+
+.toc {
+  page-break-before: always;
+  page-break-after: always;
+}
+
+/* ============================================================
+   PAGE STRUCTURE (PRINT / PDF)
+   ============================================================ */
+
+.type--pdf body {
+  margin: 0;
+  padding: 0;
+}
+
+.type--pdf a:not(.no-href)::after {
+  content: " → " attr(href);
+  font-size: 0.78em;
+  word-break: break-all;
+  font-family: var(--code-font);
+  color: var(--text-faint);
+}
+
+.type--pdf .cover,
+.type--epub .cover {
+  position: absolute;
+  overflow: hidden;
+}
+
+.type--pdf .cover {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.type--epub .cover {
+  top: 2em;
+  left: 2em;
+  right: 2em;
+  bottom: 2em;
+}
+
+.type--pdf .cover__content,
+.type--epub .cover__content {
+  position: absolute;
+  top: 30%;
+  left: 2em;
+  right: 2em;
+  transform: translateY(-50%);
+}
+
+.type--pdf .cover__sentinel {
+  page-break-after: always;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer-template {
+  font-size: 9pt;
+  font-family: var(--heading-font);
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+
+/* ============================================================
+   HIDDEN / ARIA
+   ============================================================ */
+
+[hidden],
+[aria-hidden] {
+  display: none;
+}

@@ -61,6 +61,8 @@ app.post('/api/download', (req, res) => {
   const args = ['pdf', '-o', outputPath, url];
   if (theme === 'dark') {
     args.push('--style', path.join(__dirname, 'dark.css'));
+  } else if (theme === 'light') {
+    args.push('--style', path.join(__dirname, 'light.css'));
   }
 
   const percollate = spawn('percollate', args);
