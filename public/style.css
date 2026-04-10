@@ -227,6 +227,32 @@ input[type="url"]::placeholder {
   color: #10b981;
 }
 
+/* Theme Dropdown */
+.theme-dropdown {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: var(--transition);
+  text-transform: lowercase;
+}
+
+.theme-dropdown:hover, .theme-dropdown:focus {
+  border-color: var(--border-hover);
+  color: var(--text-muted);
+}
+
+.theme-dropdown option {
+  background: var(--bg);
+  color: var(--text);
+}
+
 /* Submit Button */
 button[type="submit"] {
   display: inline-flex;

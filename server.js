@@ -41,7 +41,7 @@ function extractFilenameFromUrl(url) {
 }
 
 app.post('/api/download', (req, res) => {
-  const { url, filename } = req.body;
+  const { url, filename, theme } = req.body;
 
   if (!url) {
     return res.status(400).json({ success: false, error: 'URL is required' });
@@ -58,7 +58,12 @@ app.post('/api/download', (req, res) => {
 
   console.log(`Generating PDF: ${url} -> ${outputPath}`);
 
-  const percollate = spawn('percollate', ['pdf', '-o', outputPath, url]);
+  const args = ['pdf', '-o', outputPath, url];
+  if (theme === 'dark') {
+    args.push('--style', path.join(__dirname, 'dark.css'));
+  }
+
+  const percollate = spawn('percollate', args);
 
   let stderr = '';
 

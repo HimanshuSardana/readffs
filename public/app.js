@@ -1,6 +1,7 @@
 const form = document.getElementById("download-form");
 const urlInput = document.getElementById("url-input");
 const submitBtn = document.getElementById("submit-btn");
+const themeSelect = document.getElementById("theme-select");
 const historyList = document.getElementById("history-list");
 const emptyMsg = document.getElementById("empty-msg");
 const antiPaywallToggle = document.getElementById("anti-paywall-toggle");
@@ -187,6 +188,7 @@ form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   let url = urlInput.value.trim();
+  const theme = themeSelect.value;
 
   if (!url) return;
 
@@ -201,7 +203,7 @@ form.addEventListener("submit", async (event) => {
     const res = await fetch(`${API_BASE}/api/download`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url }), // Filename removed
+      body: JSON.stringify({ url, theme }), // Filename removed
     });
     const data = await res.json();
 
