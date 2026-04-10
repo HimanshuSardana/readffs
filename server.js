@@ -105,6 +105,16 @@ app.get('/api/downloads', (req, res) => {
   res.json(history);
 });
 
+app.get('/api/pdf/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(DOWNLOAD_DIR, filename);
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).json({ success: false, error: 'File not found' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`readffs. running at http://localhost:${PORT}`);
   console.log(`PDFs will be saved to: ${DOWNLOAD_DIR}`);
