@@ -30,16 +30,21 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-async function loadHistory() {
+function loadHistory() {
   try {
-    const res = await fetch(`${API_BASE}/api/downloads`);
-    const data = await res.json();
-    allDownloads = Array.isArray(data) ? data : [];
+    const stored = localStorage.getItem("readffs_history");
+    allDownloads = stored ? JSON.parse(stored) : [];
+    if (!Array.isArray(allDownloads)) allDownloads = [];
     currentPage = 1; // Reset to first page on load
     renderHistory();
   } catch (error) {
     showTempMessage("history unavailable", "error");
+    allDownloads = [];
   }
+}
+
+function saveHistoryToLocal() {
+  localStorage.setItem("readffs_history", JSON.stringify(allDownloads));
 }
 
 function renderHistory() {
@@ -190,7 +195,14 @@ form.addEventListener("submit", async (event) => {
 
     urlInput.value = "";
     showTempMessage(`saved ${data.filename}`, "success");
-    await loadHistory();
+    
+    allDownloads.unshift({
+      url: url,
+      filename: data.filename,
+      date: new Date().toISOString()
+    });
+    saveHistoryToLocal();
+    renderHistory();
   } catch (error) {
     showTempMessage("network error", "error");
   } finally {

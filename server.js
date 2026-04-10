@@ -13,25 +13,9 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const DOWNLOAD_DIR = path.join(os.homedir(), 'personal', 'reading');
-const HISTORY_FILE = path.join(DOWNLOAD_DIR, 'downloads.json');
 
 if (!fs.existsSync(DOWNLOAD_DIR)) {
   fs.mkdirSync(DOWNLOAD_DIR, { recursive: true });
-}
-
-function loadHistory() {
-  try {
-    if (fs.existsSync(HISTORY_FILE)) {
-      return JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8'));
-    }
-  } catch (e) {
-    console.error('Error loading history:', e);
-  }
-  return [];
-}
-
-function saveHistory(history) {
-  fs.writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2));
 }
 
 function slugify(text) {
@@ -88,21 +72,8 @@ app.post('/api/download', (req, res) => {
       return res.status(500).json({ success: false, error: stderr || 'Failed to generate PDF' });
     }
 
-    const history = loadHistory();
-    history.unshift({
-      url,
-      filename: pdfFilename,
-      date: new Date().toISOString()
-    });
-    saveHistory(history);
-
     res.json({ success: true, filename: pdfFilename, url });
   });
-});
-
-app.get('/api/downloads', (req, res) => {
-  const history = loadHistory();
-  res.json(history);
 });
 
 app.get('/api/pdf/:filename', (req, res) => {
